@@ -117,6 +117,18 @@ describe('nx-dotnet e2e', () => {
       ).toThrow();
     });
 
+    it('should generate an app without launchSettings.json', async () => {
+      const app = uniq('app');
+      await runNxCommandAsync(
+        `generate @nx-dotnet/core:app ${app} --language="C#" --template="webapi" --args="--exclude-launch-settings=true"`,
+      );
+
+      expect(() => checkFilesExist(`apps/${app}`)).not.toThrow();
+      expect(() =>
+        checkFilesExist(`apps/${app}/Properties/launchSettings.json`),
+      ).toThrow();
+    });
+
     it('should build and test an app', async () => {
       const app = uniq('app');
       const testProj = `${app}-test`;

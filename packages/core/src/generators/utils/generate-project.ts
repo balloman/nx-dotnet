@@ -45,6 +45,7 @@ export interface NormalizedSchema
   className: string;
   namespaceName: string;
   projectType?: ProjectType;
+  __unparsed__: string[];
 }
 
 export async function normalizeOptions(
@@ -68,6 +69,7 @@ export async function normalizeOptions(
   const parsedTags = getProjectTagsFromSchema(options);
   const template = await getTemplate(options, client);
   const namespaceName = getNamespaceFromSchema(host, options, projectDirectory);
+  const __unparsed__ = options.__unparsed__ || [];
 
   return {
     ...options,
@@ -81,6 +83,7 @@ export async function normalizeOptions(
     projectTemplate: template as KnownDotnetTemplates,
     namespaceName,
     projectType: projectType ?? options.projectType ?? 'library',
+    __unparsed__,
   };
 }
 
@@ -203,13 +206,9 @@ export async function GenerateProject(
   };
 
   // Combine appended arguments with the ones that are passed in through the args property.
-  const additionalArguments = [];
-  if (options.args) {
-    additionalArguments.push(...options.args);
-  }
-  if (options._) {
-    additionalArguments.push(...options._);
-  }
+  const additionalArguments = options.args?.concat(
+    normalizedOptions.__unparsed__,
+  );
 
   if (isDryRun()) {
     newParams['dryRun'] = true;

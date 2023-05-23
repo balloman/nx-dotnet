@@ -38,7 +38,7 @@ describe('nx-dotnet project generator', () => {
       skipSwaggerLib: true,
       projectType: 'application',
       pathScheme: 'nx',
-      _: [],
+      __unparsed__: [],
       args: [],
     };
 
@@ -127,7 +127,7 @@ describe('nx-dotnet project generator', () => {
   });
 
   it('should forward args to dotnet new', async () => {
-    options._ = ['--foo', 'bar'];
+    options.__unparsed__ = ['--foo', 'bar'];
     options.args = ['--help'];
     const spy = jest.spyOn(dotnetClient, 'new');
     await GenerateProject(appTree, options, dotnetClient, 'library');

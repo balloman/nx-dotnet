@@ -101,13 +101,16 @@
       },
       "default": []
     },
-    "_": {
-      "type": "array",
+    "__unparsed__": {
       "hidden": true,
+      "type": "array",
       "items": {
         "type": "string"
       },
-      "default": []
+      "$default": {
+        "$source": "unparsed"
+      },
+      "x-priority": "internal"
     }
   },
   "required": ["name", "language"]
